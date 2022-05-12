@@ -28,18 +28,20 @@ export default class App extends Component {
         }
     }
 
-    toggleTodo = (event) => {
-        this.setState({todoItems: this.state.todoItems.map(item => {
-            if (item.action === event.target.value) {
-                item.done = !item.done;
-            }
-            return item;
-            })})
-    }
+    toggleTodo = (todo) => this.setState({todoItems:
+            this.state.todoItems.map(item => item.action === todo.action
+                ? { ...item, done: !item.done } : item)});
 
-    todoTableRows = () => {
-        return this.state.todoItems.map(item => <tr><td>{item.action}</td><td><button value={item.action} onClick={this.toggleTodo}>{item.done.toString()}</button></td></tr>)
-    }
+
+    todoTableRows = () => this.state.todoItems.map(item =>
+        <tr key={ item.action }>
+            <td>{ item.action }</td>
+            <td>
+                <input type="checkbox" checked={ item.done }
+                       onChange={ () => this.toggleTodo(item)} />
+            </td>
+        </tr>
+    )
 
     render = () =>
         <div>
