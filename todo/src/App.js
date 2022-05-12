@@ -13,8 +13,8 @@ export default class App extends Component {
         super(props);
         this.state = {
             userName: "Adam",
-            todoItems: [{ action: "Buy flowers", done: false}],
-            showCompletedTasks: false
+            todoItems: [],
+            showCompleted: true
         }
     }
 
@@ -33,7 +33,16 @@ export default class App extends Component {
         .filter(item => item.done === completed)
         .map(item => <TodoRow key={ item.action } item={ item } toggleTodo={this.toggleTodo} />)
 
-    toggleShowCompleted = () => this.setState({showCompletedTasks: !this.state.showCompletedTasks})
+    componentDidMount() {
+        console.log("componentDidMount");
+        let items = JSON.parse(localStorage.getItem("todoItems"));
+        this.setState({todoItems:  items ? items : this.state.todoItems});
+    }
+
+    componentDidUpdate() {
+        console.log("componentDidUpdate")
+        localStorage.setItem("todoItems", JSON.stringify(this.state.todoItems))
+    }
 
     render = () =>
         <div>
@@ -44,12 +53,15 @@ export default class App extends Component {
                     <thead>
                         <tr><th>Description</th><th>Done</th></tr>
                     </thead>
-                    <tbody>{ this.todoTableRows(false) }</tbody>
+                    <tbody>{ this.todoTableRows(false)}</tbody>
                 </table>
                 <div className="bg-secondary text-white text-center p-2">
-                    <VisibilityControl  description="Completed Tasks" toggleShowCompleted={this.toggleShowCompleted}/>
+                    <VisibilityControl  description="Completed Tasks"
+                                        callback={(checked) => this.setState({showCompleted: checked})}
+                                        isChecked={this.state.showCompleted}
+                    />
                 </div>
-                { this.state.showCompletedTasks &&
+                { this.state.showCompleted &&
                 <table className="table table-striped table-bordered">
                     <thead>
                         <tr><th>Description</th><th>Done</th></tr>
