@@ -14,7 +14,7 @@ export default class TodoCreator extends Component {
 		this.setState({newItemText: event.target.value})
 	}
 
-	handleClick = () => {
+	createNewTodo = () => {
 		let text = this.state.newItemText;
 		if (text !== "" && !this.props.items.find(item => item.action === text)) {
 			this.props.createNewTodo(text);
@@ -25,6 +25,6 @@ export default class TodoCreator extends Component {
 	render = () =>
 		<div className="my-1">
 			<input className="form-control" value={ this.state.newItemText } onChange={ this.updateNewTextValue } />
-			<button className="btn btn-primary mt-1" onClick={ this.handleClick }>ADD</button>
+			<button className="btn btn-primary mt-1" onClick={ this.createNewTodo }>ADD</button>
 		</div>
 }

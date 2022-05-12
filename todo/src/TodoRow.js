@@ -3,10 +3,10 @@ import React, {Component} from "react";
 export default class TodoRow extends Component {
 	render = () =>
 		<tr>
-			<td>{ this.props.action }</td>
+			<td>{ this.props.item.action }</td>
 			<td>
-				<input type="checkbox" checked={ this.props.done }
-				       onChange={ this.props.toggleTodo } />
+				<input type="checkbox" checked={ this.props.item.done }
+				       onChange={ () => this.props.toggleTodo(this.props.item) } />
 			</td>
 		</tr>
 }

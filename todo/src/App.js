@@ -29,7 +29,7 @@ export default class App extends Component {
 
 
     todoTableRows = () => this.state.todoItems.map(item =>
-        <TodoRow key={ item.action } action={ item.action } done={ item.done} toggleTodo={() => this.toggleTodo(item)}/>
+        <TodoRow key={ item.action } item={ item } toggleTodo={this.toggleTodo}/>
     )
 
     render = () =>
