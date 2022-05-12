@@ -33,15 +33,17 @@ export default class App extends Component {
         .filter(item => item.done === completed)
         .map(item => <TodoRow key={ item.action } item={ item } toggleTodo={this.toggleTodo} />)
 
-    componentDidMount() {
+    componentDidMount = () => {
         console.log("componentDidMount");
-        let items = JSON.parse(localStorage.getItem("todoItems"));
-        this.setState({todoItems:  items ? items : this.state.todoItems});
-    }
+        let todos = JSON.parse(localStorage.getItem("todos"));
+        if (todos) {
+            this.setState(todos);
+        }
+    };
 
-    componentDidUpdate() {
+    componentDidUpdate = () => {
         console.log("componentDidUpdate")
-        localStorage.setItem("todoItems", JSON.stringify(this.state.todoItems))
+        localStorage.setItem("todos", JSON.stringify(this.state))
     }
 
     render = () =>
