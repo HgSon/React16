@@ -2,34 +2,40 @@ import React, { Component } from 'react';
 
 export class CartDetailRows extends Component {
 
-	updateQuantity = (item, event) => {
-		this.props.updateQuantity(item.product, event.target.value)
+	updateQuantity = (product, event) => {
+		this.props.updateQuantity(product, event.target.value)
 	}
 
 	render() {
 		if (!this.props.cart || this.props.cart.length === 0) {
-			return <tr><td>Your Cart Is Empty</td></tr>
+			return <tr><td colSpan="5">Your Cart Is Empty</td></tr>
 		} else {
-			let list = this.props.cart.map(item => {
-				return (
-					<tr key={ item.product.id }>
-						<td>
-							<input type="number" value={ item.quantity }
-							       onChange={(event) => this.updateQuantity(item, event) } />
-						</td>
-						<td>
-							{ item.product.name }
-						</td>
-						<td>
-							{ item.product.price }
-						</td>
-						<td>
-							{ item.product.price * item.quantity }
-						</td>
+			return <React.Fragment>
+					{ this.props.cart.map(item => {
+						console.log("item", item.product);
+						return (
+							<tr key={ item.product.id }>
+								<td>
+									<input type="number" value={ item.quantity }
+									       onChange={(event) => this.updateQuantity(item.product, event) } />
+								</td>
+								<td>{ item.product.name }</td>
+								<td>{ item.product.price.toFixed(2) }</td>
+								<td>{ (item.product.price * item.quantity).toFixed(2) }</td>
+								<td>
+									<button className="btn btn-sm btn-danger"
+											onClick={ () => this.props.removeFromCart(item.product) }>
+										Remove
+									</button>
+								</td>
+							</tr>
+						)
+					})}
+					<tr>
+						<th colSpan="3" className="text-right">Total:</th>
+						<th colSpan="2">${ this.props.cartPrice.toFixed(2) }</th>
 					</tr>
-				)
-			})
-			return list;
+			</React.Fragment>
 		}
 	}
 }

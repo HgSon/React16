@@ -8,6 +8,8 @@ export const CartReducer = (storeData, action) => {
 		...storeData
 	}
 
+	//console.log("action", action)
+
 	const payloadProduct = action.payload.product;
 	const payloadQuantity = action.payload.quantity;
 
@@ -27,13 +29,8 @@ export const CartReducer = (storeData, action) => {
 			return newStore;
 		//수량 변경
 		case ActionTypes.CART_UPDATE:
-			console.log("update cart");
-			console.log("payloadQuantity", payloadQuantity)
 			newStore.cart = newStore.cart.map((item) => {
 				if (item.product.id === payloadProduct.id) {
-					console.log("match");
-					console.log("id", item.product.id)
-					console.log(action.payload)
 					const diff = payloadQuantity - item.quantity;
 					//차액만큼 더함
 					newStore.cartPrice += diff * item.product.price;
@@ -42,11 +39,10 @@ export const CartReducer = (storeData, action) => {
 				}
 				return item;
 			})
-			console.log("newStore", newStore)
 			return newStore;
 		//상품 장바구니에서 삭제
 		case ActionTypes.CART_REMOVE:
-			let selection = newStore.cart.find(item => item.product.id === payloadProduct.id);
+			let selection = newStore.cart.find(item => item.product.id === action.payload.id);
 			if (selection) {
 				newStore.cartItems -= selection.quantity;
 				newStore.cartPrice -= selection.product.price * selection.quantity;
