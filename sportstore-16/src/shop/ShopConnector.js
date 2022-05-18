@@ -4,9 +4,10 @@ import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {Shop} from "./Shop";
 import {DataTypes} from "../data/Types";
+import {addToCart, clearCart, removeFromCart, updateCartQuantity} from "../data/CartActionCreators";
 
 const mapStateToProps = (dataSource) => ({...dataSource});
-const mapDispatchToProps = { loadData };
+const mapDispatchToProps = { loadData, addToCart, updateCartQuantity, removeFromCart, clearCart };
 
 const filterProducts = (products = [], category) =>
 	(!category || category === "All")

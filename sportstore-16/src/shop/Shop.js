@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Redirect, Switch} from "react-router-dom
 import {ShopConnector} from "./ShopConnector";
 import {CategoryNavigation} from "./CategoryNavigation";
 import {ProductList} from "./ProductList";
+import {CartSummary} from "./CartSummary";
 
 export class Shop extends Component {
 	render = () =>
@@ -22,5 +23,6 @@ export class Shop extends Component {
 					<ProductList products={ this.props.products } />
 				</div>
 			</div>
+			<CartSummary {...this.props} />
 		</div>
 }
