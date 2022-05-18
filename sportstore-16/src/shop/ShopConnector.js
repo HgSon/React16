@@ -5,6 +5,7 @@ import {Redirect, Route, Switch} from "react-router-dom";
 import {Shop} from "./Shop";
 import {DataTypes} from "../data/Types";
 import {addToCart, clearCart, removeFromCart, updateCartQuantity} from "../data/CartActionCreators";
+import {CartDetails} from "./CartDetails";
 
 const mapStateToProps = (dataSource) => ({...dataSource});
 const mapDispatchToProps = { loadData, addToCart, updateCartQuantity, removeFromCart, clearCart };
@@ -26,6 +27,9 @@ export const ShopConnector = connect(mapStateToProps, mapDispatchToProps)(
 					      return  <Shop {...this.props} {...routeProps}
 					       products={ filterProducts(this.props.products, routeProps.match.params.category)}/>}}
 				/>
+				<Route path="/shop/cart" render={(routeProps) => {
+					return <CartDetails {...this.props} {...routeProps}/>
+				}}/>
 				<Redirect to="/shop/products" />
 			</Switch>
 
