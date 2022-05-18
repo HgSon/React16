@@ -8,47 +8,55 @@ export const CartReducer = (storeData, action) => {
 		...storeData
 	}
 
-	const { product, quantity } = action.payload;
+	const payloadProduct = action.payload.product;
+	const payloadQuantity = action.payload.quantity;
 
 	switch (action.type) {
-		//상품 담기
+		//상품 담기, 기존상품 추가
 		case ActionTypes.CART_ADD:
-			newStore.cart = [...newStore.cart, product]
-			newStore.cartItems++;
-			newStore.cartPrice += product.price * quantity;
-			break;
+			let existing = newStore.cart.find(item => item.product.id === payloadProduct.id);
+			if (existing) {
+				existing.quantity += payloadQuantity;
+			} else {
+				newStore.cart = [...newStore.cart, action.payload]
+			}
+
+			newStore.cartItems += payloadQuantity;
+			newStore.cartPrice += payloadProduct.price * payloadQuantity;
+
+			return newStore;
 		//수량 변경
 		case ActionTypes.CART_UPDATE:
-			newStore.cart.map(item => {
-				if (item.id === product.id) {
-					const diff = product.quantity - item.quantity;
+			newStore.cart.map((item) => {
+				if (item.product.id === payloadProduct.id) {
+					const diff = payloadQuantity - item.quantity;
 					//차액만큼 더함
-					newStore.cartPrice += diff * product.price;
-					return product;
+					newStore.cartPrice += diff * item.product.price;
+					newStore.cartItems += diff;
+					return action.payload;
 				}
 				return item;
 			})
-			break;
+			return newStore;
 		//상품 장바구니에서 삭제
 		case ActionTypes.CART_REMOVE:
-			let index = newStore.cart.findIndex(item => item.id === product.id);
-			if (index !== -1) {
-				const { price, quantity } = newStore.cart[index];
-				newStore.cartItems--;
-				newStore.cartPrice -= price * quantity;
-				newStore.cart = newStore.filter(item => item.id !== product.id);
+			let selection = newStore.cart.find(item => item.product.id === payloadProduct.id);
+			if (selection) {
+				newStore.cartItems -= selection.quantity;
+				newStore.cartPrice -= selection.product.price * selection.quantity;
+				newStore.cart = newStore.cart.filter(item => item !== selection);
 			}
-			break;
+
+			return newStore;
 		//장바구니 비우기
 		case ActionTypes.CART_CLEAR:
-			newStore = {
+			return {
 				cart: [],
 				cartItems: 0,
 				cartPrice: 0,
 				...storeData
 			}
-			break;
 		default:
-			return newStore
+			return storeData || {};
 	}
 }
