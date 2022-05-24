@@ -18,17 +18,23 @@ export class PaginationControls extends Component {
 
 	render() {
 		return (
-			<div>
-				<div>
-					<PaginationButtons currentPage={this.props.currentPage} pageCount={this.props.pageCount} navigate={this.props.navigateToPage} />
+			<div className="m-2">
+				<div className="text-center m-1">
+					<PaginationButtons currentPage={this.props.currentPage}
+					                   pageCount={this.props.pageCount}
+					                   navigate={this.props.navigateToPage} />
 				</div>
-				<div>
-					<select value={this.props.pageSize || this.pageSizes[0]} onChange={this.handleChangePageSize}>
+				<div className="form-inline justify-content-center">
+					<select className="form-control"
+					        value={this.props.pageSize || this.pageSizes[0]}
+					        onChange={this.handleChangePageSize}>
 						{this.pageSizes.map(size =>
 							<option value={size} key={size}>{size} per page</option>
 						)}
 					</select>
-					<select value={this.props.sortKey || this.sortKeys[0]} onChange={this.handleChangeSortKey}>
+					<select className="form-control"
+					        value={this.props.sortKey || this.sortKeys[0]}
+					        onChange={this.handleChangeSortKey}>
 						{this.sortKeys.map(key =>
 							<option value={key} key={key}>Sort By {key}</option>
 						)}

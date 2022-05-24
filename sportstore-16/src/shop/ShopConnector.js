@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {loadData} from "../data/ActionCreators";
+import {loadData, placeOrder} from "../data/ActionCreators";
 import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {Shop} from "./Shop";
@@ -7,9 +7,12 @@ import {DataTypes} from "../data/Types";
 import {addToCart, clearCart, removeFromCart, updateCartQuantity} from "../data/CartActionCreators";
 import {CartDetails} from "./CartDetails";
 import {DataGetter} from "../data/DataGetter";
+import {Thanks} from "./Thanks";
 
 const mapStateToProps = (dataSource) => ({...dataSource});
-const mapDispatchToProps = { loadData, addToCart, updateCartQuantity, removeFromCart, clearCart };
+const mapDispatchToProps = { loadData, placeOrder,
+	addToCart, updateCartQuantity, removeFromCart, clearCart,
+};
 
 export const ShopConnector = connect(mapStateToProps, mapDispatchToProps)(
 	class extends Component {
@@ -27,6 +30,9 @@ export const ShopConnector = connect(mapStateToProps, mapDispatchToProps)(
 				       }}/>
 				<Route path="/shop/cart" render={(routeProps) => {
 					return <CartDetails {...this.props} {...routeProps}/>
+				}}/>
+				<Route path="/shop/thanks" render={(routeProps) => {
+					return <Thanks {...this.props} {...routeProps}/>
 				}}/>
 				<Redirect to="/shop/products/all/1" />
 			</Switch>

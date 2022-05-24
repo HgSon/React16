@@ -1,11 +1,10 @@
-import {ActionTypes} from "./Types";
+import {ActionTypes, DataTypes} from "./Types";
 
 /**
  * 상태를 받아서 액션으로 상태 변경
  *
  * @param storeData state 초기값
  * @param action 데이터 수정방법
- * @returns {{[p: string]: *}|*|{}}
  * @constructor
  */
 export const ShopReducer = (storeData, action) => {
@@ -28,7 +27,15 @@ export const ShopReducer = (storeData, action) => {
 			return {
 				...storeData,
 				sortKey : action.payload
+			};
+		case ActionTypes.DATA_STORE:
+			if (action.payload.dataType === DataTypes.ORDERS) {
+				return {
+					...storeData,
+					order : action.payload.data
+				}
 			}
+			break;
 		default:
 			return storeData || {};
 	}
