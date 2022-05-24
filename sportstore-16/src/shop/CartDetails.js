@@ -9,7 +9,7 @@ export class CartDetails extends Component {
 	}
 
 	render() {
-		console.log("props", this.props)
+		//console.log("props", this.props)
 		return (
 			<div className="m-3">
 				<h2 className="text-center">Your Cart</h2>

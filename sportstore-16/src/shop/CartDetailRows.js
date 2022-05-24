@@ -12,7 +12,7 @@ export class CartDetailRows extends Component {
 		} else {
 			return <React.Fragment>
 					{ this.props.cart.map(item => {
-						console.log("item", item.product);
+						//console.log("item", item.product);
 						return (
 							<tr key={ item.product.id }>
 								<td>

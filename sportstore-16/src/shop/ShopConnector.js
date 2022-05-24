@@ -6,31 +6,29 @@ import {Shop} from "./Shop";
 import {DataTypes} from "../data/Types";
 import {addToCart, clearCart, removeFromCart, updateCartQuantity} from "../data/CartActionCreators";
 import {CartDetails} from "./CartDetails";
+import {DataGetter} from "../data/DataGetter";
 
 const mapStateToProps = (dataSource) => ({...dataSource});
 const mapDispatchToProps = { loadData, addToCart, updateCartQuantity, removeFromCart, clearCart };
-
-const filterProducts = (products = [], category) =>
-	(!category || category === "All")
-		? products
-		: products.filter(p => p.category.toLowerCase() === category.toLowerCase())
-
 
 export const ShopConnector = connect(mapStateToProps, mapDispatchToProps)(
 	class extends Component {
 		render = () =>
 			<Switch>
-				<Route path="/shop/products/:category?"
+				<Redirect from="/shop/products/:category" to="/shop/products/:category/1" exact={ true } />
+				<Route path="/shop/products/:category/:page"
 				       render={(routeProps) => {
-				       //	console.dir(this.props)
-					     // console.dir(routeProps)
-					      return  <Shop {...this.props} {...routeProps}
-					       products={ filterProducts(this.props.products, routeProps.match.params.category)}/>}}
-				/>
+				       	  //console.log("shopconnector props", this.props, routeProps)
+					      return  (
+						      <DataGetter {...this.props} {...routeProps}>
+							      <Shop {...this.props} {...routeProps}/>
+						      </DataGetter>
+					      )
+				       }}/>
 				<Route path="/shop/cart" render={(routeProps) => {
 					return <CartDetails {...this.props} {...routeProps}/>
 				}}/>
-				<Redirect to="/shop/products" />
+				<Redirect to="/shop/products/all/1" />
 			</Switch>
 
 		componentDidMount() {
