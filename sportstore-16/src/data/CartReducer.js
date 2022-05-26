@@ -10,28 +10,25 @@ export const CartReducer = (storeData, action) => {
 
 	//console.log("action", action)
 
-	const payloadProduct = action.payload.product;
-	const payloadQuantity = action.payload.quantity;
-
 	switch (action.type) {
 		//상품 담기, 기존상품 추가
 		case ActionTypes.CART_ADD:
-			let existing = newStore.cart.find(item => item.product.id === payloadProduct.id);
+			let existing = newStore.cart.find(item => item.product.id === action.payload.product.id);
 			if (existing) {
-				existing.quantity += payloadQuantity;
+				existing.quantity += action.payload.quantity;
 			} else {
 				newStore.cart = [...newStore.cart, action.payload]
 			}
 
-			newStore.cartItems += payloadQuantity;
-			newStore.cartPrice += payloadProduct.price * payloadQuantity;
+			newStore.cartItems += action.payload.quantity;
+			newStore.cartPrice += action.payload.product.price * action.payload.quantity;
 
 			return newStore;
 		//수량 변경
 		case ActionTypes.CART_UPDATE:
 			newStore.cart = newStore.cart.map((item) => {
-				if (item.product.id === payloadProduct.id) {
-					const diff = payloadQuantity - item.quantity;
+				if (item.product.id === action.payload.product.id) {
+					const diff = action.payload.quantity - item.quantity;
 					//차액만큼 더함
 					newStore.cartPrice += diff * item.product.price;
 					newStore.cartItems += diff;

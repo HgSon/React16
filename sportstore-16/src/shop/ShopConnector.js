@@ -8,6 +8,7 @@ import {addToCart, clearCart, removeFromCart, updateCartQuantity} from "../data/
 import {CartDetails} from "./CartDetails";
 import {DataGetter} from "../data/DataGetter";
 import {Thanks} from "./Thanks";
+import {Checkout} from "./Checkout";
 
 const mapStateToProps = (dataSource) => ({...dataSource});
 const mapDispatchToProps = { loadData, placeOrder,
@@ -33,6 +34,9 @@ export const ShopConnector = connect(mapStateToProps, mapDispatchToProps)(
 				}}/>
 				<Route path="/shop/thanks" render={(routeProps) => {
 					return <Thanks {...this.props} {...routeProps}/>
+				}}/>
+				<Route path="/shop/checkout" render={(routeProps) => {
+					return <Checkout {...this.props} {...routeProps}/>
 				}}/>
 				<Redirect to="/shop/products/all/1" />
 			</Switch>
