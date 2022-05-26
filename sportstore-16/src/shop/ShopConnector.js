@@ -1,49 +1,55 @@
-import {connect} from "react-redux";
-import {loadData, placeOrder} from "../data/ActionCreators";
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {Redirect, Route, Switch} from "react-router-dom";
-import {Shop} from "./Shop";
-import {DataTypes} from "../data/Types";
-import {addToCart, clearCart, removeFromCart, updateCartQuantity} from "../data/CartActionCreators";
 import {CartDetails} from "./CartDetails";
-import {DataGetter} from "../data/DataGetter";
-import {Thanks} from "./Thanks";
 import {Checkout} from "./Checkout";
+import {Shop} from "./Shop";
+import {Thanks} from "./Thanks";
+import * as ShopActions from "../data/ActionCreators";
+import * as CartActions from "../data/CartActionCreators";
+import {DataGetter} from "../data/DataGetter";
+import {DataTypes} from "../data/Types";
 
-const mapStateToProps = (dataSource) => ({...dataSource});
-const mapDispatchToProps = { loadData, placeOrder,
-	addToCart, updateCartQuantity, removeFromCart, clearCart,
-};
+const mapDispatchToProps = { ...ShopActions, ...CartActions };
 
-export const ShopConnector = connect(mapStateToProps, mapDispatchToProps)(
+export const ShopConnector = connect(dataSource => dataSource, mapDispatchToProps)(
 	class extends Component {
-		render = () =>
-			<Switch>
-				<Redirect from="/shop/products/:category" to="/shop/products/:category/1" exact={ true } />
-				<Route path="/shop/products/:category/:page"
-				       render={(routeProps) => {
-				       	  //console.log("shopconnector props", this.props, routeProps)
-					      return  (
-						      <DataGetter {...this.props} {...routeProps}>
-							      <Shop {...this.props} {...routeProps}/>
-						      </DataGetter>
-					      )
-				       }}/>
-				<Route path="/shop/cart" render={(routeProps) => {
-					return <CartDetails {...this.props} {...routeProps}/>
-				}}/>
-				<Route path="/shop/thanks" render={(routeProps) => {
-					return <Thanks {...this.props} {...routeProps}/>
-				}}/>
-				<Route path="/shop/checkout" render={(routeProps) => {
-					return <Checkout {...this.props} {...routeProps}/>
-				}}/>
-				<Redirect to="/shop/products/all/1" />
-			</Switch>
-
-		componentDidMount() {
-			this.props.loadData(DataTypes.CATEGORIES);
-			this.props.loadData(DataTypes.PRODUCTS)
+		constructor(props) {
+			super(props);
+			console.log("ShopConnector",this.props);
 		}
+
+		selectComponent = (routeProps) => {
+			const wrap = (Component, Content) =>
+				<Component { ...this.props } { ...routeProps }>
+					{ Content && wrap(Content)}
+				</Component>
+
+			switch (routeProps.match.params.section) {
+				case "products":
+					return wrap(DataGetter, Shop)
+				case "cart":
+					return wrap(CartDetails)
+				case "thanks":
+					return wrap(Thanks)
+				case "checkout":
+					return wrap(Checkout)
+				default :
+					return <Redirect to="/shop/products/all/1" />
+			}
+		}
+		render() {
+			//console.log("ShopConnector render",this.props);
+			return (
+				<Switch>
+					<Redirect from="/shop/products/:category" to="/shop/products/:category/1" exact={ true } />
+					<Route path="/shop/:section?/:category?/:page?"
+					       render={routeProps => this.selectComponent(routeProps)}
+					/>
+				</Switch>
+			)
+		}
+
+		componentDidMount = () => this.props.loadData(DataTypes.CATEGORIES)
 	}
 )
