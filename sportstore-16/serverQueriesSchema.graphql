@@ -18,7 +18,7 @@ type orderPage {
 }
 
 type productSelection {
-    quentity: Int!, product: product
+    quantity: Int!, product: product
 }
 
 type Query {
