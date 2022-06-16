@@ -1,7 +1,7 @@
 import {compose, graphql} from "react-apollo";
 import {ordersSummaryQuery} from "./clientQueries";
 import {OrdersTable} from "./OrdersTable";
-import {shipOrder} from "./clientMutstaions";
+import {shipOrder} from "./clientMutations";
 
 const vars = {
 	onlyShipped: false, page: 1, pageSize: 10, sort: "id"

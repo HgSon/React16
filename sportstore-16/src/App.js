@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Provider} from "react-redux";
 import {SportsStoreDataStore} from "./data/DataStore";
-import {Redirect, Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import {ShopConnector} from "./shop/ShopConnector";
 import {Admin} from "./admin/Admin";
 
